@@ -23,8 +23,8 @@ internal object Publishing {
         r.maven { a ->
           a.name = "sonatype"
 
-          val releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
-          val snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots"
+          val releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+          val snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
           a.url = project.uri(if (isSnapshot) snapshotsRepoUrl else releasesRepoUrl)
 
           a.credentials {
@@ -84,9 +84,9 @@ internal object Publishing {
 
         doLast {
           if (isSnapshot) {
-            logger.quiet("Browse files at https://s01.oss.sonatype.org/content/repositories/snapshots/com/squareup/")
+            logger.quiet("Browse files at https://oss.sonatype.org/content/repositories/snapshots/com/autonomousapps/")
           } else {
-            logger.quiet("If 'promote' task failed: after publishing to Sonatype, visit https://s01.oss.sonatype.org to close and release from staging")
+            logger.quiet("If 'promote' task failed: after publishing to Sonatype, visit https://oss.sonatype.org to close and release from staging")
           }
         }
       }

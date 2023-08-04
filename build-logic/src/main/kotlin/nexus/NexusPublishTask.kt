@@ -34,7 +34,7 @@ abstract class NexusPublishTask : DefaultTask() {
   }
 
   companion object {
-    private const val OSSRH_API_BASE_URL = "https://s01.oss.sonatype.org/service/local/"
-    private const val GROUP = "com.squareup"
+    private const val OSSRH_API_BASE_URL = "https://oss.sonatype.org/service/local/"
+    private const val GROUP = "com.autonomousapps"
   }
 }
