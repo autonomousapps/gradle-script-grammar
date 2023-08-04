@@ -10,7 +10,6 @@ import org.gradle.api.publish.maven.tasks.PublishToMavenRepository
 import org.gradle.plugins.signing.Sign
 import org.gradle.plugins.signing.SigningExtension
 
-@Suppress("UnstableApiUsage")
 internal object Publishing {
 
   fun setup(project: Project): Unit = project.run {
@@ -95,10 +94,10 @@ internal object Publishing {
   }
 
   private fun setupPom(pom: MavenPom): Unit = pom.run {
-    name.set("Gradle Dependencies Sorter")
-    description.set("Sorts Gradle dependencies")
-    url.set("https://github.com/square/gradle-dependencies-sorter")
-    inceptionYear.set("2022")
+    name.set("Gradle Script Grammar")
+    description.set("Parses Gradle build scripts (Groovy or Kotlin DSL)")
+    url.set("https://github.com/autonomousapps/gradle-script-grammar")
+    inceptionYear.set("2023")
 
     licenses {
       it.license { l ->
@@ -111,19 +110,11 @@ internal object Publishing {
         d.id.set("autonomousapps")
         d.name.set("Tony Robalik")
       }
-      it.developer { d ->
-        d.id.set("darshanparajuli")
-        d.name.set("Darshan Parajuli")
-      }
-      it.developer { d ->
-        d.id.set("holmes")
-        d.name.set("Jason Holmes")
-      }
     }
     scm {
-      it.connection.set("scm:git:git://github.com/square/gradle-dependencies-sorter.git")
-      it.developerConnection.set("scm:git:ssh://github.com/square/gradle-dependencies-sorter.git")
-      it.url.set("https://https://github.com/square/gradle-dependencies-sorter")
+      it.connection.set("scm:git:git://github.com/autonomousapps/gradle-script-grammar.git")
+      it.developerConnection.set("scm:git:ssh://github.com/autonomousapps/gradle-script-grammar.git")
+      it.url.set("https://github.com/autonomousapps/gradle-script-grammar")
     }
   }
 }

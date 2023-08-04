@@ -17,7 +17,6 @@ class LibConvention : Plugin<Project> {
 
   override fun apply(target: Project): Unit = target.run {
     pluginManager.apply(BaseConvention::class.java)
-    pluginManager.apply("com.github.johnrengelman.shadow")
 
     extensions.configure(JavaPluginExtension::class.java) { j ->
       j.withJavadocJar()
