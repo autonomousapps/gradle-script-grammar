@@ -1,0 +1,31 @@
+[versions]
+antlr = "4.10.1"
+java = "11"
+junit5 = "5.7.2"
+kotlin = "1.8.10"
+moshi = "1.14.0"
+retrofit = "2.9.0"
+shadow = "8.1.0"
+groovy = "3.0.13"
+spock = "2.1-groovy-3.0"
+
+[libraries]
+antlr-core = { module = "org.antlr:antlr4", version.ref = "antlr" }
+antlr-runtime = { module = "org.antlr:antlr4-runtime", version.ref = "antlr" }
+moshi-core = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
+moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
+okhttp3 = "com.squareup.okhttp3:okhttp:4.9.0"
+retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
+
+groovy = { module = "org.codehaus.groovy:groovy", version.ref = "groovy" }
+junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5" }
+junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
+spock = { module = "org.spockframework:spock-core", version.ref = "spock" }
+truth = "com.google.truth:truth:1.1.3"
+
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin"}
+shadow-gradle-plugin = { module = "com.github.johnrengelman:shadow", version.ref = "shadow" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

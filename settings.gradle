@@ -1,0 +1,31 @@
+pluginManagement {
+  includeBuild 'build-logic'
+
+  plugins {
+    id 'com.gradle.enterprise' version '3.11.2'
+  }
+}
+
+plugins {
+  id 'com.gradle.enterprise'
+  // Apply the foojay-resolver plugin to allow automatic download of JDKs
+  id 'org.gradle.toolchains.foojay-resolver-convention' version '0.4.0'
+}
+
+dependencyResolutionManagement {
+  repositories {
+    mavenCentral()
+  }
+}
+
+gradleEnterprise {
+  buildScan {
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+    termsOfServiceAgree = 'yes'
+    publishAlways()
+  }
+}
+
+rootProject.name = 'gradle-script-grammar'
+
+include ':gradle-script-grammar'
