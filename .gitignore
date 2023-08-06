@@ -3,3 +3,6 @@
 
 # Ignore Gradle build output directory
 build
+
+# These files do not need to be checked into version control
+gradle-script-grammar/src/main/gen

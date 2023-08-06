@@ -54,8 +54,10 @@ projectMapEntry
     :   WS? key=(CONFIGURATION|PATH) WS? quote? value=ID quote? WS? COMMA? WS?
     ;
 
+// We don't need a matching PARENS_OPEN because FILE and FILES include the opening parens
+// this is dumb and should be fixed.
 fileDependency
-    :   (FILE|FILES) PARENS_OPEN quote? ID quote? PARENS_CLOSE
+    :   (FILE|FILES) quote? ID quote? PARENS_CLOSE
     ;
 
 closure
