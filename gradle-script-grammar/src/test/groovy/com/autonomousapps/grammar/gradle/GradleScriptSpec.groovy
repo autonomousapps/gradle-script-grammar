@@ -166,6 +166,12 @@ final class GradleScriptSpec extends Specification {
             implementation(libs.commonsCompress) {
               because 'Better ZipFile implementation'
             }
+            
+            implementation (libs.spotify.authSdk){
+              artifact {
+                type = "aar"
+              }
+            }
 
             implementation(libs.jgit.core) {
               because 'Better than the command line git via ProcessBuilder.'
@@ -421,6 +427,7 @@ final class GradleScriptSpec extends Specification {
       "project(':platform')",
       "project(':xml-combiner')",
       'libs.commonsCompress',
+      'libs.spotify.authSdk',
       'libs.jgit.core',
       'libs.jgit.ssh.core',
       'libs.jgit.ssh.agent',
