@@ -3,7 +3,7 @@ parser grammar GradleScript;
 options { tokenVocab=GradleScriptLexer; }
 
 script
-    :   (text|BRACE_OPEN|BRACE_CLOSE|dependencies|buildscript)* EOF
+    :   (text|dependencies|buildscript)* EOF
     ;
 
 dependencies
@@ -61,7 +61,7 @@ fileDependency
     ;
 
 closure
-    :   BRACE_OPEN (text+?|closure)+ BRACE_CLOSE
+    :   BRACE_OPEN (codeblock+?|closure)+ BRACE_CLOSE
     ;
 
 quote
@@ -70,6 +70,26 @@ quote
     ;
 
 text
+    : UNICODE_LATIN
+    | ID
+    | WS
+    | DIGIT
+    | FILE
+    | FILES
+    | EQUALS
+    | SEMI
+    | QUOTE_SINGLE
+    | QUOTE_DOUBLE
+    | BRACE_OPEN
+    | BRACE_CLOSE
+    | PARENS_OPEN
+    | PARENS_CLOSE
+    | BACKSLASH
+    | PROJECT
+    | COMMA
+    ;
+
+codeblock
     : UNICODE_LATIN
     | ID
     | WS
