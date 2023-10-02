@@ -525,6 +525,57 @@ final class GradleScriptSpec extends Specification {
     )
   }
 
+  def "can parse dependencies with multiple closures"() {
+    given:
+    def sourceFile = dir.resolve('build.gradle')
+    Files.writeString(
+      sourceFile,
+      '''\
+        dependencies {
+            implementation project(':aws')
+            implementation platform(project(':platform'))
+            implementation project(':xml-combiner')
+
+            implementation(libs.commonsCompress) {
+              because 'Better ZipFile implementation'
+            }
+            
+            implementation (libs.spotify.authSdk){
+              artifact {
+                type = "aar"
+              }
+            }
+            
+            implementation libs.guava
+            implementation libs.kotlin.serialization
+            implementation (libs.kotlin.coroutines){
+              artifact {
+                type = "aar"
+                anotherLevel {
+                    dir = "project/"
+                }
+              }
+            }
+        }
+        '''.stripIndent()
+    )
+
+    when:
+    def list = parseGroovyGradleScript(sourceFile)
+
+    then:
+    assertThat(list).containsExactly(
+            "project(':aws')",
+            "project(':platform')",
+            "project(':xml-combiner')",
+            'libs.commonsCompress',
+            'libs.spotify.authSdk',
+            'libs.guava',
+            'libs.kotlin.serialization',
+            'libs.kotlin.coroutines'
+    )
+  }
+
   private static parseGroovyGradleScript(Path file) {
     def input = Files.newInputStream(file, StandardOpenOption.READ).withCloseable {
       CharStreams.fromStream(it)
