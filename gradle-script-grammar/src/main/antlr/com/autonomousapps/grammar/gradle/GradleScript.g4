@@ -61,7 +61,7 @@ fileDependency
     ;
 
 closure
-    :   BRACE_OPEN text+? BRACE_CLOSE
+    :   BRACE_OPEN (codeblock+?|closure)+ BRACE_CLOSE
     ;
 
 quote
@@ -82,6 +82,24 @@ text
     | QUOTE_DOUBLE
     | BRACE_OPEN
     | BRACE_CLOSE
+    | PARENS_OPEN
+    | PARENS_CLOSE
+    | BACKSLASH
+    | PROJECT
+    | COMMA
+    ;
+
+codeblock
+    : UNICODE_LATIN
+    | ID
+    | WS
+    | DIGIT
+    | FILE
+    | FILES
+    | EQUALS
+    | SEMI
+    | QUOTE_SINGLE
+    | QUOTE_DOUBLE
     | PARENS_OPEN
     | PARENS_CLOSE
     | BACKSLASH

@@ -166,6 +166,12 @@ final class GradleScriptSpec extends Specification {
             implementation(libs.commonsCompress) {
               because 'Better ZipFile implementation'
             }
+            
+            implementation (libs.spotify.authSdk){
+              artifact {
+                type = "aar"
+              }
+            }
 
             implementation(libs.jgit.core) {
               because 'Better than the command line git via ProcessBuilder.'
@@ -421,6 +427,7 @@ final class GradleScriptSpec extends Specification {
       "project(':platform')",
       "project(':xml-combiner')",
       'libs.commonsCompress',
+      'libs.spotify.authSdk',
       'libs.jgit.core',
       'libs.jgit.ssh.core',
       'libs.jgit.ssh.agent',
@@ -515,6 +522,57 @@ final class GradleScriptSpec extends Specification {
       'projects.redwoodWidgetCompose',
       'libs.jetbrains.compose.foundation',
       'projects.redwoodLayoutSharedTest',
+    )
+  }
+
+  def "can parse dependencies with multiple closures"() {
+    given:
+    def sourceFile = dir.resolve('build.gradle')
+    Files.writeString(
+      sourceFile,
+      '''\
+        dependencies {
+            implementation project(':aws')
+            implementation platform(project(':platform'))
+            implementation project(':xml-combiner')
+
+            implementation(libs.commonsCompress) {
+              because 'Better ZipFile implementation'
+            }
+            
+            implementation (libs.spotify.authSdk){
+              artifact {
+                type = "aar"
+              }
+            }
+            
+            implementation libs.guava
+            implementation libs.kotlin.serialization
+            implementation (libs.kotlin.coroutines){
+              artifact {
+                type = "aar"
+                anotherLevel {
+                    dir = "project/"
+                }
+              }
+            }
+        }
+        '''.stripIndent()
+    )
+
+    when:
+    def list = parseGroovyGradleScript(sourceFile)
+
+    then:
+    assertThat(list).containsExactly(
+            "project(':aws')",
+            "project(':platform')",
+            "project(':xml-combiner')",
+            'libs.commonsCompress',
+            'libs.spotify.authSdk',
+            'libs.guava',
+            'libs.kotlin.serialization',
+            'libs.kotlin.coroutines'
     )
   }
 
