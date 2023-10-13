@@ -1,5 +1,8 @@
 # gradle-script-grammar
 
+## Version 0.3
+* Add support for dependencies with multiple closures.
+
 ## Version 0.2
 * Address issue with parsing file dependencies.
 
