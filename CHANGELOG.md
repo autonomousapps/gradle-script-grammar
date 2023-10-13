@@ -3,6 +3,8 @@
 ## Version 0.3
 * Add support for dependencies with multiple closures.
 
+Thanks (Ivan Alvarado)[https://github.com/ivanalvarado]
+
 ## Version 0.2
 * Address issue with parsing file dependencies.
 
