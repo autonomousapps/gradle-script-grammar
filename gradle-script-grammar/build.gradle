@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
   id 'com.autonomousapps.lib'
   id 'antlr'
@@ -11,7 +9,7 @@ plugins {
 def pkg = 'com.autonomousapps.grammar.gradle'
 def dir = pkg.replace('.', '/')
 def antlrSrc = "src/main/antlr/$dir".toString()
-tasks.named('generateGrammarSource', AntlrTask) {
+def generateGrammarSource = tasks.named('generateGrammarSource', AntlrTask) {
   outputDirectory = file(layout.buildDirectory.dir("generated-src/antlr/main/$dir"))
   arguments += [
     // Specify the package declaration for generated Java source
@@ -23,9 +21,7 @@ tasks.named('generateGrammarSource', AntlrTask) {
   ]
 }
 // Workaround for https://github.com/gradle/gradle/issues/19555
-tasks.named('sourcesJar') {
-  dependsOn('generateGrammarSource')
-}
+sourceSets.main.java.srcDir(generateGrammarSource.map { files() })
 
 // Workaround for https://github.com/gradle/gradle/issues/25885
 // Technically it should be `explodeCodeSourceMain dependsOn generateGrammarSource` and

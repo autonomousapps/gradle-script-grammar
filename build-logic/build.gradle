@@ -33,3 +33,19 @@ dependencies {
     because 'Closing and releasing Sonatype Nexus staging repo'
   }
 }
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(11)
+  }
+}
+
+tasks.withType(JavaCompile).configureEach {
+  options.release.set(11)
+}
+
+tasks.named('compileKotlin') {
+  kotlinOptions {
+    jvmTarget = '11'
+  }
+}
