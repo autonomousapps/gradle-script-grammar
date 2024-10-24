@@ -1,5 +1,8 @@
 # gradle-script-grammar
 
+## Version 0.4
+* [feat] support enforcedPlatform capability.
+
 ## Version 0.3
 * Add support for dependencies with multiple closures.
 
