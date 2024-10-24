@@ -6,6 +6,7 @@ DEPENDENCIES: 'dependencies' WS* BRACE_OPEN;
 FILE: 'file(';
 FILES: 'files(';
 TEST_FIXTURES: 'testFixtures(';
+ENFORCED_PLATFORM: 'enforcedPlatform(';
 PLATFORM: 'platform(';
 PROJECT: 'project';
 BUILDSCRIPT: 'buildscript';

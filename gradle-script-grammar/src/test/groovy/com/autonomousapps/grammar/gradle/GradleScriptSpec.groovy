@@ -160,6 +160,7 @@ final class GradleScriptSpec extends Specification {
 
           dependencies {
             implementation project(':aws')
+            implementation enforcedPlatform(libs.bigBom)
             implementation platform(project(':platform'))
             implementation project(':xml-combiner')
 
@@ -424,6 +425,7 @@ final class GradleScriptSpec extends Specification {
     assertThat(list).containsExactly(
       'com.guardsquare:proguard-gradle:7.1.0',
       "project(':aws')",
+      "libs.bigBom",
       "project(':platform')",
       "project(':xml-combiner')",
       'libs.commonsCompress',
@@ -622,6 +624,21 @@ final class GradleScriptSpec extends Specification {
 
     @Override
     void enterNormalDeclaration(GradleScript.NormalDeclarationContext ctx) {
+      def tokens = parser.tokenStream
+      def configuration = tokens.getText(ctx.configuration())
+      def dependency = tokens.getText(ctx.dependency())
+      def closure = ctx.closure()?.with {
+        tokens.getText(it)
+      }
+      println("tokens; conf=$configuration, dep=$dependency, closure=$closure")
+
+      println(fullText(ctx))
+
+      list += dependency
+    }
+
+    @Override
+    void enterEnforcedPlatformDeclaration(GradleScript.EnforcedPlatformDeclarationContext ctx) {
       def tokens = parser.tokenStream
       def configuration = tokens.getText(ctx.configuration())
       def dependency = tokens.getText(ctx.dependency())

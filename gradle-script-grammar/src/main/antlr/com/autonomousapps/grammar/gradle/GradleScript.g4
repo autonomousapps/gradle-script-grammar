@@ -7,7 +7,7 @@ script
     ;
 
 dependencies
-    :   DEPENDENCIES (normalDeclaration|testFixturesDeclaration|platformDeclaration)* BRACE_CLOSE
+    :   DEPENDENCIES (normalDeclaration|testFixturesDeclaration|enforcedPlatformDeclaration|platformDeclaration)* BRACE_CLOSE
     ;
 
 buildscript
@@ -25,6 +25,10 @@ normalDeclaration
 
 testFixturesDeclaration
     :   configuration PARENS_OPEN? TEST_FIXTURES quote? dependency quote? PARENS_CLOSE PARENS_CLOSE? closure?
+    ;
+
+enforcedPlatformDeclaration
+    :   configuration PARENS_OPEN? ENFORCED_PLATFORM quote? dependency quote? PARENS_CLOSE PARENS_CLOSE? closure?
     ;
 
 platformDeclaration
