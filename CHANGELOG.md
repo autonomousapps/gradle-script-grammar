@@ -1,5 +1,8 @@
 # gradle-script-grammar
 
+## Version 0.5
+* [chore] update antlr to 4.13.2 (latest).
+
 ## Version 0.4
 * [feat] support enforcedPlatform capability.
 
