@@ -1,13 +1,14 @@
 [versions]
-antlr = "4.10.1"
+antlr = "4.13.2"
+# java is referenced from build-logic
 java = "11"
-junit5 = "5.7.2"
-kotlin = "1.8.10"
+junit5 = "5.11.4"
+kotlin = "1.9.25"
 moshi = "1.14.0"
 retrofit = "2.9.0"
 shadow = "8.1.0"
-groovy = "3.0.13"
-spock = "2.1-groovy-3.0"
+groovy = "3.0.23"
+spock = "2.3-groovy-3.0"
 
 [libraries]
 antlr-core = { module = "org.antlr:antlr4", version.ref = "antlr" }
@@ -19,6 +20,7 @@ retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "ret
 retrofit-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
 
 groovy = { module = "org.codehaus.groovy:groovy", version.ref = "groovy" }
+# junit-api, junit-engine, and truth are referenced from build-logic
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5" }
 junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
 spock = { module = "org.spockframework:spock-core", version.ref = "spock" }
