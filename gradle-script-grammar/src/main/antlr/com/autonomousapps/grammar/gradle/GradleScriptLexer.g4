@@ -9,6 +9,7 @@ TEST_FIXTURES: 'testFixtures(';
 ENFORCED_PLATFORM: 'enforcedPlatform(';
 PLATFORM: 'platform(';
 PROJECT: 'project';
+GLOBALDEP: 'globalDep';
 BUILDSCRIPT: 'buildscript';
 PATH: 'path:';
 CONFIGURATION: 'configuration:';

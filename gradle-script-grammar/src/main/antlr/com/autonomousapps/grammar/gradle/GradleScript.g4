@@ -40,7 +40,8 @@ configuration
     ;
 
 dependency
-    :   externalDependency
+    :   globalDependency
+    |   externalDependency
     |   projectDependency
     |   fileDependency
     ;
@@ -52,6 +53,10 @@ externalDependency
 projectDependency
     :   PROJECT PARENS_OPEN quote? ID quote? PARENS_CLOSE
     |   PROJECT PARENS_OPEN projectMapEntry+ PARENS_CLOSE
+    ;
+
+globalDependency
+    :   GLOBALDEP PARENS_OPEN quote? ID quote? PARENS_CLOSE
     ;
 
 projectMapEntry
@@ -90,6 +95,7 @@ text
     | PARENS_CLOSE
     | BACKSLASH
     | PROJECT
+    | GLOBALDEP
     | COMMA
     ;
 
@@ -107,6 +113,7 @@ codeblock
     | PARENS_OPEN
     | PARENS_CLOSE
     | BACKSLASH
+    | GLOBALDEP
     | PROJECT
     | COMMA
     ;
