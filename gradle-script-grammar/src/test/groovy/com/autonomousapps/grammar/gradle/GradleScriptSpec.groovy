@@ -527,6 +527,39 @@ final class GradleScriptSpec extends Specification {
     )
   }
 
+  // https://github.com/square/gradle-dependencies-sorter/issues/153
+  def "can parse multiple dependencies blocks using dot syntax"() {
+    given:
+    def sourceFile = dir.resolve('build.gradle')
+    Files.writeString(
+      sourceFile,
+      """\
+      kotlin {
+        sourceSets {
+          commonMain.dependencies {
+            api projects.redwoodLayoutWidget
+            implementation projects.redwoodFlexbox
+            implementation projects.redwoodWidgetCompose
+          }
+        }
+        sourceSets.commonMain.dependencies {
+            implementation libs.jetbrains.compose.foundation
+        }
+      }""".stripIndent()
+    )
+
+    when:
+    def list = parseGroovyGradleScript(sourceFile)
+
+    then:
+    assertThat(list).containsExactly(
+      'projects.redwoodLayoutWidget',
+      'projects.redwoodFlexbox',
+      'projects.redwoodWidgetCompose',
+      'libs.jetbrains.compose.foundation',
+    )
+  }
+
   def "can parse dependencies with multiple closures"() {
     given:
     def sourceFile = dir.resolve('build.gradle')
