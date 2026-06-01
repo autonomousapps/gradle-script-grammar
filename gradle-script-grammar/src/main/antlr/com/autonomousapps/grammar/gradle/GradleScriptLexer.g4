@@ -2,7 +2,7 @@ lexer grammar GradleScriptLexer;
 
 channels { WHITESPACE, COMMENTS }
 
-DEPENDENCIES: 'dependencies' WS* BRACE_OPEN;
+DEPENDENCIES: (NAME '.')* 'dependencies' WS* BRACE_OPEN;
 FILE: 'file(';
 FILES: 'files(';
 TEST_FIXTURES: 'testFixtures(';
