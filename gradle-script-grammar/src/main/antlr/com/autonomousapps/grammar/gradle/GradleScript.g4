@@ -52,6 +52,7 @@ externalDependency
 projectDependency
     :   PROJECT PARENS_OPEN quote? ID quote? PARENS_CLOSE
     |   PROJECT PARENS_OPEN projectMapEntry+ PARENS_CLOSE
+    |   PROJECT_ACCESSOR
     ;
 
 projectMapEntry
@@ -90,6 +91,7 @@ text
     | PARENS_CLOSE
     | BACKSLASH
     | PROJECT
+    | PROJECT_ACCESSOR
     | COMMA
     ;
 
@@ -108,12 +110,14 @@ codeblock
     | PARENS_CLOSE
     | BACKSLASH
     | PROJECT
+    | PROJECT_ACCESSOR
     | COMMA
     ;
 
 // Sea of crap I don't care about
 sea
     : ID
+    | PROJECT_ACCESSOR
     | EQUALS
     | QUOTE_SINGLE
     | QUOTE_DOUBLE
