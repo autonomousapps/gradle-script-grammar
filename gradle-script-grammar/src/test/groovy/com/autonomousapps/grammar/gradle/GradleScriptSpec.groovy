@@ -1,5 +1,6 @@
 package com.autonomousapps.grammar.gradle
 
+import groovy.transform.NamedVariant
 import org.antlr.v4.runtime.CharStream
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
@@ -106,6 +107,44 @@ final class GradleScriptSpec extends Specification {
 
     then:
     assertThat(list).containsExactly("project(':alpha:betical')", "project(':not')")
+  }
+
+  def "dependencies are identified by their correct kind"() {
+    given:
+    def script = """
+        dependencies {
+            api projects.marvin
+            api 'com.example:lib:1.0'
+            api project(':core')
+            api files('libs/foo.jar')
+            api libs.foo
+        }
+    """.stripIndent()
+
+    when:
+    def lexer = new GradleScriptLexer(CharStreams.fromString(script))
+    def tokens = new CommonTokenStream(lexer)
+    def parser = new GradleScript(tokens)
+    def tree = parser.script()
+
+    then:
+    def dependenciesBlock = tree.children.find { it instanceof GradleScript.DependenciesContext }
+    def declarations = dependenciesBlock.children.findAll { it instanceof GradleScript.NormalDeclarationContext }
+
+    // projects.marvin -> projectDependency
+    verifyDependency(dep: declarations[0].dependency(), projectDependency: true)
+
+    // 'com.example:lib:1.0' -> externalDependency
+    verifyDependency(dep: declarations[1].dependency(), externalDependency: true)
+
+    // project(':core') -> projectDependency
+    verifyDependency(dep: declarations[2].dependency(), projectDependency: true)
+
+    // files('libs/foo.jar') -> fileDependency
+    verifyDependency(dep: declarations[3].dependency(), fileDependency: true)
+
+    // libs.foo -> externalDependency
+    verifyDependency(dep: declarations[4].dependency(), externalDependency: true)
   }
 
   def "can parse complex script"() {
@@ -609,6 +648,20 @@ final class GradleScriptSpec extends Specification {
             'libs.kotlin.serialization',
             'libs.kotlin.coroutines'
     )
+  }
+
+  @NamedVariant
+  private void verifyDependency(
+          def dep,
+          boolean externalDependency = false,
+          boolean projectDependency = false,
+          boolean fileDependency = false
+  ) {
+    verifyAll {
+      (dep.externalDependency() != null) == externalDependency
+      (dep.projectDependency() != null) == projectDependency
+      (dep.fileDependency() != null) == fileDependency
+    }
   }
 
   private static parseGroovyGradleScript(Path file) {
