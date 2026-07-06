@@ -9,10 +9,11 @@ import org.gradle.api.plugins.JavaPluginExtension
  * This plugin is applied to our JVM lib projects.
  * ```
  * plugins {
- *   id("com.autonomousapps.lib")
+ *   id 'com.autonomousapps.lib'
  * }
  * ```
  */
+@Suppress("unused")
 class LibConvention : Plugin<Project> {
 
   override fun apply(target: Project): Unit = target.run {
