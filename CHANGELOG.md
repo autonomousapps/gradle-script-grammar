@@ -1,5 +1,9 @@
 # gradle-script-grammar
 
+## Version 0.6
+* [feat]: add type-safe project dependencies to the grammar.
+* [feat]: support `dependencies` referenced with dot syntax
+
 ## Version 0.5
 * [chore] update antlr to 4.13.2 (latest).
 
