@@ -3,6 +3,7 @@
 ## Version 0.6
 * [feat]: add type-safe project dependencies to the grammar.
 * [feat]: support `dependencies` referenced with dot syntax
+* [chore]: use "com.vanniktech:gradle-maven-publish-plugin" to publish.
 
 ## Version 0.5
 * [chore] update antlr to 4.13.2 (latest).
