@@ -20,16 +20,16 @@ dependencies {
 
 java {
   toolchain {
-    languageVersion = JavaLanguageVersion.of(11)
+    languageVersion = JavaLanguageVersion.of(17)
   }
 }
 
 tasks.withType(JavaCompile).configureEach {
-  options.release.set(11)
+  options.release.set(17)
 }
 
 tasks.named('compileKotlin') {
   kotlinOptions {
-    jvmTarget = '11'
+    jvmTarget = '17'
   }
 }

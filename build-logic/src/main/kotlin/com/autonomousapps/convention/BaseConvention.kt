@@ -49,8 +49,10 @@ class BaseConvention : Plugin<Project> {
       add("implementation", platform("org.jetbrains.kotlin:kotlin-bom"))
 
       // JUnit5 / Jupiter Platform stuff
+      add("testImplementation", platform(versionCatalog.findLibrary("junit-bom").orElseThrow()))
       add("testImplementation", versionCatalog.findLibrary("junit-api").orElseThrow())
       add("testRuntimeOnly", versionCatalog.findLibrary("junit-engine").orElseThrow())
+      add("testRuntimeOnly", versionCatalog.findLibrary("junit-launcher").orElseThrow())
 
       add("testImplementation", versionCatalog.findLibrary("truth").orElseThrow())
     }

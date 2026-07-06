@@ -2,10 +2,10 @@
 antlr = "4.13.2"
 # java is referenced from build-logic
 java = "11"
-junit5 = "5.11.4"
-kotlin = "1.9.25"
+junit5 = "5.14.1"
+kotlin = "2.3.20"
 mavenPublish = "0.35.0"
-shadow = "8.1.0"
+shadow = "9.5.1"
 groovy = "3.0.23"
 spock = "2.3-groovy-3.0"
 
@@ -13,12 +13,14 @@ spock = "2.3-groovy-3.0"
 antlr-core = { module = "org.antlr:antlr4", version.ref = "antlr" }
 antlr-runtime = { module = "org.antlr:antlr4-runtime", version.ref = "antlr" }
 groovy = { module = "org.codehaus.groovy:groovy", version.ref = "groovy" }
-# junit-api, junit-engine, and truth are referenced from build-logic
+# junit-x, and truth are referenced from build-logic
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit5" }
 junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
+junit-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin"}
 mavenPublishPlugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublish" }
-shadow-gradle-plugin = { module = "com.github.johnrengelman:shadow", version.ref = "shadow" }
+shadow-gradle-plugin = { module = "com.gradleup.shadow:com.gradleup.shadow.gradle.plugin", version.ref = "shadow" }
 spock = { module = "org.spockframework:spock-core", version.ref = "spock" }
 truth = "com.google.truth:truth:1.1.3"
 
