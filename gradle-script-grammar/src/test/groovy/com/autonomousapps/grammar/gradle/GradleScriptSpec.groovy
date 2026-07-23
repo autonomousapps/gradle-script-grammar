@@ -650,6 +650,99 @@ final class GradleScriptSpec extends Specification {
     )
   }
 
+  def "exposes blocks inside dependencies"() {
+    given:
+    def script = '''\
+      dependencies {
+        constraints {
+          runtime 'g:c:1'
+          api("g:b:1") {
+            because("Required by the Gradle plugin")
+          }
+          api libs.g.a
+        }
+        intellijPlatform {
+          instrumentationTools()
+          androidStudio libs.versions.androidStudio
+        }
+        implementation("g:z:1") {
+          because("Needed at runtime")
+        }
+      }
+      '''.stripIndent()
+
+    when:
+    def parsed = parseScript(script)
+    def dependencies = parsed.tree.dependencies()[0]
+    def constraints = dependencies.block()[0]
+    def intellijPlatform = dependencies.block()[1]
+    def apiConstraint = constraints.block()[0]
+
+    then:
+    assertThat(dependencies.block().collect { it.ID().text }).containsExactly(
+      'constraints',
+      'intellijPlatform',
+    ).inOrder()
+    assertThat(parsed.tokens.getText(constraints)).isEqualTo('''\
+      constraints {
+          runtime 'g:c:1'
+          api("g:b:1") {
+            because("Required by the Gradle plugin")
+          }
+          api libs.g.a
+        }'''.stripIndent())
+    assertThat(parsed.tokens.getText(intellijPlatform)).isEqualTo('''\
+      intellijPlatform {
+          instrumentationTools()
+          androidStudio libs.versions.androidStudio
+        }'''.stripIndent())
+    assertThat(apiConstraint.ID().text).isEqualTo('api')
+    assertThat(parsed.tokens.getText(apiConstraint.callArguments())).isEqualTo('("g:b:1")')
+    assertThat(dependencies.normalDeclaration().collect { it.configuration().text }).containsExactly('implementation')
+    assertThat(dependencies.normalDeclaration()[0].closure()).isNotNull()
+  }
+
+  def "exposes dotted and callable blocks"() {
+    given:
+    def script = '''\
+      android.sourceSets {
+        zeta()
+        files("libs/a.jar")
+        alpha()
+      }
+
+      sqldelight {
+        databases {
+          create("Database") {
+            zeta()
+            alpha()
+          }
+        }
+      }
+      '''.stripIndent()
+
+    when:
+    def parsed = parseScript(script)
+    def topLevelBlocks = parsed.tree.block()
+    def databases = topLevelBlocks[1].block()[0]
+    def createBlock = databases.block()[0]
+
+    then:
+    assertThat(topLevelBlocks.collect { it.ID().text }).containsExactly(
+      'android.sourceSets',
+      'sqldelight',
+    ).inOrder()
+    assertThat(databases.ID().text).isEqualTo('databases')
+    assertThat(databases.block()).hasSize(1)
+    assertThat(createBlock.ID().text).isEqualTo('create')
+    assertThat(parsed.tokens.getText(createBlock.callArguments())).isEqualTo('("Database")')
+    assertThat(parsed.tokens.getText(createBlock)).isEqualTo('''\
+      create("Database") {
+            zeta()
+            alpha()
+          }'''.stripIndent())
+  }
+
   @NamedVariant
   private void verifyDependency(
           def dep,
@@ -679,6 +772,20 @@ final class GradleScriptSpec extends Specification {
     walker.walk(listener, tree)
 
     return listener.list
+  }
+
+  private static Map<String, Object> parseScript(String script) {
+    def input = CharStreams.fromString(script)
+    def lexer = new GradleScriptLexer(input)
+    def tokens = new CommonTokenStream(lexer)
+    def parser = new GradleScript(tokens)
+    def errorListener = new SimpleANTLRErrorListener({ throw it })
+    lexer.removeErrorListeners()
+    lexer.addErrorListener(errorListener)
+    parser.removeErrorListeners()
+    parser.addErrorListener(errorListener)
+
+    return [tree: parser.script(), tokens: tokens]
   }
 
   private static class GroovyGradleScriptListener extends GradleScriptBaseListener {

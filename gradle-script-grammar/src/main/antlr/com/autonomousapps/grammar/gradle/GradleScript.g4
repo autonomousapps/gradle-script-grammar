@@ -3,19 +3,21 @@ parser grammar GradleScript;
 options { tokenVocab=GradleScriptLexer; }
 
 script
-    :   (text|dependencies|buildscript)* EOF
+    :   (dependencies|buildscript|block|text)* EOF
     ;
 
+// Nested DSL blocks such as constraints { api("g:a:1") } remain separate from surrounding dependency declarations.
 dependencies
-    :   DEPENDENCIES (normalDeclaration|testFixturesDeclaration|enforcedPlatformDeclaration|platformDeclaration)* BRACE_CLOSE
+    :   DEPENDENCIES (normalDeclaration|testFixturesDeclaration|enforcedPlatformDeclaration|platformDeclaration|block)* BRACE_CLOSE
     ;
 
 buildscript
-    :   BUILDSCRIPT BRACE_OPEN (dependencies|block|sea)* BRACE_CLOSE
+    :   BUILDSCRIPT BRACE_OPEN (dependencies|block|closure|sea)* BRACE_CLOSE
     ;
 
+// Optional call arguments keep create("Database") { } available as a single block.
 block
-    :   ID BRACE_OPEN (block|sea)* BRACE_CLOSE
+    :   ID callArguments? BRACE_OPEN (dependencies|block|closure|sea)* BRACE_CLOSE
     ;
 
 normalDeclaration
@@ -65,8 +67,9 @@ fileDependency
     :   (FILE|FILES) quote? ID quote? PARENS_CLOSE
     ;
 
+// Closures stay opaque except for nested blocks such as artifact { type = "aar" }.
 closure
-    :   BRACE_OPEN (codeblock+?|closure)+ BRACE_CLOSE
+    :   BRACE_OPEN (dependencies|block|closure|codeblock)* BRACE_CLOSE
     ;
 
 quote
@@ -98,10 +101,17 @@ text
 codeblock
     : UNICODE_LATIN
     | ID
+    | NAME
     | WS
     | DIGIT
     | FILE
     | FILES
+    | TEST_FIXTURES
+    | ENFORCED_PLATFORM
+    | PLATFORM
+    | BUILDSCRIPT
+    | PATH
+    | CONFIGURATION
     | EQUALS
     | SEMI
     | QUOTE_SINGLE
@@ -114,13 +124,64 @@ codeblock
     | COMMA
     ;
 
-// Sea of crap I don't care about
+// Tokens from statements such as enabled = true are ignored while walking a block's nested structure.
 sea
-    : ID
+    : UNICODE_LATIN
+    | ID
+    | NAME
+    | DIGIT
+    | FILE
+    | FILES
+    | TEST_FIXTURES
+    | ENFORCED_PLATFORM
+    | PLATFORM
+    | PROJECT
     | PROJECT_ACCESSOR
+    | BUILDSCRIPT
+    | PATH
+    | CONFIGURATION
     | EQUALS
+    | SEMI
     | QUOTE_SINGLE
     | QUOTE_DOUBLE
     | PARENS_OPEN
     | PARENS_CLOSE
+    | BACKSLASH
+    | COMMA
+    ;
+
+// Balanced arguments keep create("Database") attached to its following block.
+callArguments
+    :   PARENS_OPEN callArgument* PARENS_CLOSE
+    ;
+
+// Argument values such as "Database" are grouped without interpreting their Groovy semantics.
+callArgument
+    :   callArguments
+    |   prefixedCallArguments
+    |   closure
+    |   callArgumentToken
+    ;
+
+// Lexer tokens such as files( include their opening parenthesis and only need a matching closing one.
+prefixedCallArguments
+    :   (FILE|FILES|TEST_FIXTURES|ENFORCED_PLATFORM|PLATFORM) callArgument* PARENS_CLOSE
+    ;
+
+callArgumentToken
+    :   UNICODE_LATIN
+    |   ID
+    |   NAME
+    |   DIGIT
+    |   PROJECT
+    |   PROJECT_ACCESSOR
+    |   BUILDSCRIPT
+    |   PATH
+    |   CONFIGURATION
+    |   EQUALS
+    |   SEMI
+    |   QUOTE_SINGLE
+    |   QUOTE_DOUBLE
+    |   BACKSLASH
+    |   COMMA
     ;
